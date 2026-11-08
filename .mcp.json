@@ -1,0 +1,19 @@
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "venky_token",
+      "description": "Enter the MCP access token",
+      "password": true
+    }
+  ],
+  "servers": {
+    "venky": {
+      "type": "http",
+      "url": "https://your-domain.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${input:venky_token}"
+      }
+    }
+  }
+}
