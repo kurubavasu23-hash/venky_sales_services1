@@ -15,14 +15,14 @@ class Command(BaseCommand):
     ]
 
     products = [
-        ('Apple', 'iPhone Pro Series · Demo reference', 'smartphones', 'demo-iphone', 'Catalogue reference for the latest iPhone Pro range. Exact model, specifications, pricing and shop availability must be verified.'),
-        ('Samsung', 'Galaxy S Series · Demo reference', 'smartphones', 'demo-galaxy', 'Catalogue reference for the latest Galaxy S range. Exact model, specifications, pricing and shop availability must be verified.'),
-        ('OnePlus', 'OnePlus Flagship Series · Demo reference', 'smartphones', 'demo-oneplus', 'Catalogue reference for the latest OnePlus flagship range. Exact model, specifications, pricing and shop availability must be verified.'),
-        ('Redmi', 'Redmi Note Series · Demo reference', 'smartphones', 'demo-redmi', 'Catalogue reference for the latest Redmi Note range. Exact model, specifications, pricing and shop availability must be verified.'),
-        ('realme', 'realme GT Series · Demo reference', 'smartphones', 'demo-realme', 'Catalogue reference for the latest realme GT range. Exact model, specifications, pricing and shop availability must be verified.'),
-        ('Vivo', 'vivo V Series · Demo reference', 'smartphones', 'demo-vivo', 'Catalogue reference for the latest vivo V range. Exact model, specifications, pricing and shop availability must be verified.'),
-        ('OPPO', 'OPPO Reno Series · Demo reference', 'smartphones', 'demo-oppo', 'Catalogue reference for the latest OPPO Reno range. Exact model, specifications, pricing and shop availability must be verified.'),
-        ('Motorola', 'motorola edge Series · Demo reference', 'smartphones', 'demo-motorola', 'Catalogue reference for the latest motorola edge range. Exact model, specifications, pricing and shop availability must be verified.'),
+        ('Apple', 'iPhone 16 Pro · Demo reference', 'smartphones', 'demo-iphone', 'iPhone 16 Pro catalogue reference: 6.3-inch Pro display, A18 Pro chip and Pro camera system. Reference photo and details are for product identification; shop price and stock must be confirmed.'),
+        ('Samsung', 'Galaxy S25 Ultra · Demo reference', 'smartphones', 'demo-galaxy', 'Galaxy S25 Ultra catalogue reference: 6.9-inch Dynamic AMOLED 2X display, Snapdragon 8 Elite for Galaxy and 200MP wide camera. Reference photo and shop availability must be confirmed.'),
+        ('OnePlus', 'OnePlus 13 · Demo reference', 'smartphones', 'demo-oneplus', 'OnePlus 13 catalogue reference: 6.82-inch 120Hz ProXDR display, Snapdragon 8 Elite platform and 6,000mAh dual-cell battery. Confirm regional configuration and shop stock.'),
+        ('Redmi', 'Redmi Note 14 Pro+ 5G · Demo reference', 'smartphones', 'demo-redmi', 'Redmi Note 14 Pro+ 5G catalogue reference: 6.67-inch 120Hz AMOLED display, 200MP OIS camera and 120W HyperCharge. Confirm regional configuration, price and stock.'),
+        ('realme', 'realme GT 7 Pro · Demo reference', 'smartphones', 'demo-realme', 'realme GT 7 Pro catalogue reference: flagship GT performance phone with AMOLED display, high-capacity battery and fast charging. Exact configuration, price and stock must be confirmed.'),
+        ('Vivo', 'vivo X200 Pro · Demo reference', 'smartphones', 'demo-vivo', 'vivo X200 Pro catalogue reference: premium X-series camera phone with ZEISS imaging system and flagship performance. Regional configuration, price and shop stock must be confirmed.'),
+        ('OPPO', 'OPPO Find X8 Pro · Demo reference', 'smartphones', 'demo-oppo', 'OPPO Find X8 Pro catalogue reference: premium Find-series phone with Hasselblad camera features and flagship performance. Confirm regional configuration, price and stock.'),
+        ('Motorola', 'motorola Edge 50 Ultra · Demo reference', 'smartphones', 'demo-motorola', 'motorola Edge 50 Ultra catalogue reference: premium Edge-series phone with high-resolution camera, curved display and fast charging. Confirm regional configuration, price and stock.'),
         ('Accessories', 'True Wireless Earbuds · Demo reference', 'earphones-headphones', 'demo-wireless-earbuds', 'Premium audio catalogue reference. Brand, model, features, pricing and shop availability must be verified.'),
         ('Accessories', 'Premium Wired Earphones · Demo reference', 'earphones-headphones', 'demo-wired-earphones', 'Premium audio catalogue reference. Brand, model, features, pricing and shop availability must be verified.'),
         ('Accessories', 'Fast Charger · Demo reference', 'chargers-cables', 'demo-fast-charger', 'Modern charging catalogue reference. Connector, wattage, compatibility, pricing and shop availability must be verified.'),
@@ -60,7 +60,11 @@ class Command(BaseCommand):
             if not was_created and product.is_demo and (product.name != name or product.description != description):
                 product.name = name
                 product.description = description
-                product.save(update_fields=['name', 'description', 'updated_at'])
+                product.model_name = name.replace(' · Demo reference', '')
+                product.save(update_fields=['name', 'description', 'model_name', 'updated_at'])
+            elif was_created:
+                product.model_name = name.replace(' · Demo reference', '')
+                product.save(update_fields=['model_name', 'updated_at'])
             created += int(was_created)
 
         self.stdout.write(self.style.SUCCESS(f'Demo catalogue ready. {created} product records created; existing records were left unchanged.'))
